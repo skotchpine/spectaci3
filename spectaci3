@@ -1,0 +1,288 @@
+#!/usr/bin/env bash
+
+float() {
+  bc <<< $1
+}
+
+int() {
+  printf %.0f $(float "$1")
+}
+
+setup() {
+  read -r -d '' monitor w h x y <<< $(i3-pfd)
+
+  GAP="0.02"
+  [[ $w > $h ]] && min=$w || min=$h
+  gap=$(float "$min * $GAP")
+  gap0_5=$(float "$gap * 0.5")
+  gap1_5=$(float "$gap * 1.5")
+  gap2=$(float "$gap * 2")
+
+  if [[ -v $DEBUG ]]; then
+    echo "---- setup begin ----"
+
+    echo w: $w
+    echo h: $h
+    echo x: $x
+    echo y: $y
+    echo min: $min
+    echo gap: $gap
+    echo gap0_5: $gap0_5
+    echo gap1_5: $gap1_5
+    echo gap2: $gap2
+
+    echo "---- setup end ----"
+  fi
+}
+
+full() {
+  local h=$(int "$h - $gap2")
+  local w=$(int "$w - $gap2")
+
+  if [[ -v $DEBUG ]]; then
+    echo "---- full begin ----"
+    echo h: $h
+    echo w: $w
+    echo "---- full begin ----"
+  fi
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  center
+}
+
+center() {
+  i3-msg move window to position center
+}
+
+left_half() {
+  local w=$(int "($w / 2) - $gap1_5")
+  local h=$(int "$h - $gap2")
+  local x=$(int "$x + $gap")
+  local y=$(int "$y + $gap")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+right_half() {
+  local _w=$(int "$w / 2")
+  local w=$(int "$_w - $gap1_5")
+  local h=$(int "$h - $gap2")
+  local x=$(int "$x + $_w + $gap0_5")
+  local y=$(int "$y + $gap")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+top_half() {
+  local w=$(int "$w - $gap2")
+  local _h=$(int "$h / 2")
+  local h=$(int "$_h - $gap1_5")
+  local x=$(int "$x + $gap")
+  local y=$(int "$y + $gap")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+bot_half() {
+  local w=$(int "$w - $gap2")
+  local _h=$(int "$h / 2")
+  local h=$(int "$_h - $gap1_5")
+  local x=$(int "$x + $gap")
+  local y=$(int "$y + $_h + $gap")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+left_third() {
+  local _w=$(int "$w / 3")
+  local w=$(int "$_w - $gap1_5")
+  local h=$(int "$h - $gap2")
+  local x=$(int "$x + $gap")
+  local y=$(int "$y + $gap")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+mid_third() {
+  local _w=$(int "$w / 3")
+  local w=$(int "$_w - $gap1_5")
+  local h=$(int "$h - $gap2")
+  local x=$(int "$x + $_w + $gap")
+  local y=$(int "$y + $gap")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+right_third() {
+  local _w=$(int "$w / 3")
+  local w=$(int "$_w - $gap1_5")
+  local h=$(int "$h - $gap2")
+  local x=$(int "$x + (2 * $_w) + $gap")
+  local y=$(int "$y + $gap")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+top_third() {
+  local w=$(int "$w - $gap2")
+  local _h=$(int "$h / 3")
+  local h=$(int "$_h - $gap1_5")
+  local x=$(int "$x + $gap")
+  local y=$(int "$y + $gap")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+wid_third() {
+  local w=$(int "$w - $gap2")
+  local _h=$(int "$h / 3")
+  local h=$(int "$_h - $gap1_5")
+  local x=$(int "$x + $gap")
+  local y=$(int "$y + $_h + $gap")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+bot_third() {
+  local w=$(int "$w - $gap2")
+  local _h=$(int "$h / 3")
+  local h=$(int "$_h - $gap1_5")
+  local x=$(int "$x + $gap")
+  local y=$(int "$y + (2 * $_h) + $gap")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+top_left() {
+  local _h=$(int "$h / 2")
+  local _w=$(int "$w / 2")
+  local h=$(int "$_h - $gap1_5")
+  local w=$(int "$_w - $gap1_5")
+  local x=$(int "$x + $gap")
+  local y=$(int "$y + $gap")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+bot_left() {
+  local _h=$(int "$h / 2")
+  local _w=$(int "$w / 2")
+  local h=$(int "$_h - $gap1_5")
+  local w=$(int "$_w - $gap1_5")
+  local x=$(int "$x + $gap")
+  local y=$(int "$y + $_h + $gap0_5")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+top_right() {
+  local _h=$(int "$h / 2")
+  local _w=$(int "$w / 2")
+  local h=$(int "$_h - $gap1_5")
+  local w=$(int "$_w - $gap1_5")
+  local x=$(int "$x + $_w + $gap0_5")
+  local y=$(int "$y + $gap")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+bot_right() {
+  local _h=$(int "$h / 2")
+  local _w=$(int "$w / 2")
+  local h=$(int "$_h - $gap1_5")
+  local w=$(int "$_w - $gap1_5")
+  local x=$(int "$x + $_w + $gap0_5")
+  local y=$(int "$y + $_h + $gap0_5")
+
+  i3-msg resize set height $h
+  i3-msg resize set width $w
+  i3-msg move position $x'px' $y'px'
+}
+
+what() {
+  cat <<HELP
+usage:
+  $(basename $0) <cmd>
+
+cmd:
+  h  | help
+
+  f  | full
+  c  | center
+
+  lh | left-half
+  rh | right-half
+  th | top-half
+  bh | bot-half
+
+  lt | left-third
+  mt | mid-third
+  rt | right-third
+  tt | top-third
+  wt | mid-third
+  bt | bot-third
+
+  tl | top-left
+  bl | bot-left
+  tr | top-right
+  br | bot-right
+HELP
+}
+
+main() {
+  setup
+
+  case $1 in
+    f|full) full ;;
+
+    c|center) center ;;
+
+    lh|left-half)  left_half  ;;
+    rh|right-half) right_half ;;
+    th|top-half)   top_half   ;;
+    bh|bot-half)   bot_half   ;;
+
+    lt|left-third)  left_third  ;;
+    mt|mid-third)   mid_third   ;;
+    rt|right-third) right_third ;;
+    tt|top-third)   top_third   ;;
+    wt|wid-third)   wid_third   ;;
+    bt|bot-third)   bot_third   ;;
+
+    tl|top-left)  top_left  ;;
+    bl|bot-left)  bot_left  ;;
+    tr|top-right) top_right ;;
+    br|bot-right) bot_right ;;
+
+    *) what ;;
+  esac
+}
+
+[[ $0 == $BASH_SOURCE ]] && main "$@"

@@ -1,0 +1,40 @@
+gaps inner 40
+gaps outer 0
+
+bindsym $w+0 border pixel 0
+bindsym $w+9 border pixel 4
+
+bindsym $w+Shift+0 border pixel 0
+bindsym $w+Shift+9 border pixel 4
+
+bindsym $w+$a+f exec spectaci3 f
+bindsym $w+$a+c exec spectaci3 c
+
+bindsym $w+$a+Left  exec spectaci3 lh
+bindsym $w+$a+Right exec spectaci3 rh
+bindsym $w+$a+Up    exec spectaci3 th
+bindsym $w+$a+Down  exec spectaci3 bh
+
+bindsym $w+Control+Left        exec spectaci3 tl
+bindsym $w+Control+Right       exec spectaci3 tr
+bindsym $w+Control+Shift+Left  exec spectaci3 bl
+bindsym $w+Control+Shift+Right exec spectaci3 br
+
+bindsym $a+Control+Left        exec spectaci3 lt
+bindsym $a+Control+space       exec spectaci3 mt
+bindsym $a+Control+Right       exec spectaci3 rt
+bindsym $a+Control+Up          exec spectaci3 tt
+bindsym $a+Control+Shift+space exec spectaci3 wt
+bindsym $a+Control+Down        exec spectaci3 bt
+
+bindsym $w+$a+Shift+Left  exec i3-rotate left
+bindsym $w+$a+Shift+Right exec i3-rotate right
+bindsym $w+$a+Shift+Up    exec i3-rotate normal
+
+bindsym $w+bracketleft  gaps inner current plus  10
+bindsym $w+bracketright gaps inner current minus 10
+
+bindsym $w+Shift+bracketleft  gaps inner all plus  10
+bindsym $w+Shift+bracketright gaps inner all minus 10
+
+# vim:filetype=i3.config

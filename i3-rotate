@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+read -r -d '' output _ <<< $(i3-pfd)
+
+direction=${1:-normal}
+
+xrandr --output $output --rotate $direction
+i3-msg exec setbg
+i3-msg exec bar
